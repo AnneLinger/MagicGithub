@@ -24,13 +24,11 @@ public class FakeApiService implements ApiService {
     @Override
     public List<User> getUsers() {
         // TODO: A modifier
-        /** return car la méthode doit retourner la liste, users car la liste FAKE_USERS y a été stockée en début de fichier
-         *
-         */
+        // return because getUsers() has to return the list, users because FAKE_USERS is the value of the list users in the top of the class
         return users;
 
-        // ESSAIS :
-        // return FAKE_USERS; Méthode créée initialement, lance l'app mais empêche les modifications sur la liste users
+        // TRIES :
+        // return FAKE_USERS; First try, MagicGithub is ok on a device but generateRandomUser() and deleteUser() fail because loadData() return again and again FAKE_USERS
     }
 
     /**
@@ -40,44 +38,40 @@ public class FakeApiService implements ApiService {
     @Override
     public void generateRandomUser() {
         // TODO: A modifier
-        /** 1. Initialisation d'un objet randomUser de type User pour récupérer le random dans la liste FAKE_USERS_RANDOM
-         *     Récupération dans cette liste avec get() qui prend pour paramètre la méthode nextInt appliquée à un objet random
-         *     La méthode nextInt récupère alors un index aléatoire dans FAKE_USERS_RANDOM en tenant compte de la plage d'index possibles (.size)
-         *  2. Ajout de l'objet randomUser récupéré à la liste users
-         */
-        // Random random = new Random(); Initialisation non nécessaire ??!!
+        // 1. New object User randomUser whose value is a random of FAKE_USERS_RANDOM list
+        //      get() recovers a new Random with a random index (method nextInt recovers random index in the list size)
+        // 2. Add randomUser to users list
         User randomUser = FAKE_USERS_RANDOM.get(new Random().nextInt(FAKE_USERS_RANDOM.size()));
         users.add(randomUser);
 
-        // Random avec boucle pour éviter la répétition de user
-        /**while (FAKE_USERS_RANDOM.size()>0) {
-            User randomUser = FAKE_USERS_RANDOM.get(new Random().nextInt(FAKE_USERS_RANDOM.size()));
-            users.add(randomUser);
-            FAKE_USERS_RANDOM.remove(randomUser);
-        }*/
-        /**if(FAKE_USERS_RANDOM.size()>0){
-            User randomUser = FAKE_USERS_RANDOM.get(new Random().nextInt(FAKE_USERS_RANDOM.size()));
-            users.add(randomUser);
-            User randomUserToDelete = randomUser;
-            FAKE_USERS_RANDOM.remove(randomUserToDelete);
-        }
-        else{
-            System.out.println("Il n'y a plus d'utilisateur aléatoire à générer");
-        }*/
+        // TRIES :
+
+        // FIRST TRIES with a specific User (test before learning Random() method) but failed because no var created in this class :
+        //      users.addAll(FAKE_USERS_RANDOM);
+        //      users.add(FAKE_USERS_RANDOM.get(1));
+        //      getUsers().add(FAKE_USERS_RANDOM.get(1));
+
+        // SECOND TRY ok with a specific User and a new var :
+        //      User userToAdd = FAKE_USERS_RANDOM.get(1);
+        //      users.add(userToAdd);
+
+        // AFTER SUCCESS try a method that always generate a different random User : failed because no random list created in this class (OK after talking with my mentor)
+        //      while (FAKE_USERS_RANDOM.size()>0) {
+        //          User randomUser = FAKE_USERS_RANDOM.get(new Random().nextInt(FAKE_USERS_RANDOM.size()));
+        //          users.add(randomUser);
+        //          FAKE_USERS_RANDOM.remove(randomUser);
+        //      }
+        // OR
+        //      if(FAKE_USERS_RANDOM.size()>0){
+        //          User randomUser = FAKE_USERS_RANDOM.get(new Random().nextInt(FAKE_USERS_RANDOM.size()));
+        //          users.add(randomUser);
+        //          User randomUserToDelete = randomUser;
+        //          FAKE_USERS_RANDOM.remove(randomUserToDelete);
+        //      }
+        //      else{
+        //          System.out.println("No more random User to generate");
+        //      }
     }
-
-        // ESSAI CONCLUANT AVEC UN USER SPECIFIQUE :
-        // User userToAdd = FAKE_USERS_RANDOM.get(1);
-        //users.add(userToAdd);
-
-        // ESSAIS AVEC UN USER SPECIFIQUE :
-        // FAKE_USERS_RANDOM.get(1);
-        // FakeApiServiceGenerator.FAKE_USERS.add(FakeApiServiceGenerator.FAKE_USERS_RANDOM.get(0));
-        // users.addAll(FAKE_USERS_RANDOM);
-        // generateUsers().addAll(FAKE_USERS_RANDOM);
-        // users.add(FAKE_USERS_RANDOM.get(1)); NE FAIT RIEN
-        // getUsers().add(FAKE_USERS_RANDOM.get(1)); FAIT PLANTER L'APP
-
 
     /**
      * Delete a {@link User} from the {@link FakeApiService#users} list.
@@ -85,35 +79,22 @@ public class FakeApiService implements ApiService {
     @Override
     public void deleteUser(User user) {
         // TODO: A modifier
-        /**Méthode remove invoquée sur la liste générée dans le fichiers avec pour paramètre le paramètre de deleteUser (=user à delete)
-         *
-         */
+        // remove() with the user parameter on the users list
         users.remove(user);
 
-        // ESSAIS :
-        // getUsers().remove(user);
-        // users.remove(user.re)
-        // FAKE_USERS.remove(User.id);
-        // FAKE_USERS.remove(users.remove(user));
-        // user = FAKE_USERS.remove(user);
-        // String userId = user.getId();
-        // users.remove(users.get(userId.to));
-        // users.remove(user);
-        // this.users.remove(user);
-        // FakeApiService.this.users.remove(user);
-        // getUsers().remove(user.getId());
-        // FAKE_USERS.remove(user.getId());
-        //users.remove(user.getId()+user.getAvatarUrl()+user.getLogin());
-        // boolean userDelete = users.remove(user);
-        // getUsers().remove(user.getId());
-        // FakeApiService.this.getUsers().remove(user); SUPPRIME TOUTE LA LISTE
-        // FakeApiService.this.getUsers().remove(user.getId()); NE FAIT RIEN
-        // FakeApiService.this.getUsers().remove(user.id);
-        // users.remove(user.getId());
-        // users.remove(users.get(user.hashCode()));
-        // getUsers().remove(user.hashCode());
-        // users.get(user.hashCode());
-        // generateUsers().remove(user.hashCode());
-
+        // TRIES failed because my first try of getUsers() was wrong :
+        //      users.remove(user);
+        //      users.remove(user.getId());
+        //      users.remove(users.get(user.hashCode()));
+        //      users.remove(user.getId()+user.getAvatarUrl()+user.getLogin());
+        //      this.users.remove(user);
+        //      getUsers().remove(user);
+        //      getUsers().remove(user.getId());
+        //      getUsers().remove(user.hashCode());
+        //      FAKE_USERS.remove(user.getId());
+        //      FAKE_USERS.remove(User.id);
+        //      FAKE_USERS.remove(users.remove(user));
+        //      generateUsers().remove(user.hashCode());
+        //      user = FAKE_USERS.remove(user);
     }
 }

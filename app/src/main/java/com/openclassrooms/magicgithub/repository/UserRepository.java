@@ -16,7 +16,7 @@ public class UserRepository {
 
     public List<User> getUsers() {
         // TODO: A modifier
-        // Fait appel à la méthode se trouvant dans le fichier api
+        // return getUsers() of ApiService interface
         return apiService.getUsers();
     }
 
